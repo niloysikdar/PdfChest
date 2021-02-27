@@ -10,6 +10,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final querycontroller = TextEditingController();
   int _itemcount = 0;
+  int searchCode = 0;
   var jsonResponse;
 
   Future<void> getJsondata(String query) async {
@@ -18,9 +19,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       _itemcount = jsonResponse.length;
+      searchCode = 2;
       setState(() {});
     } else {
       print("error is happening");
+      searchCode = 3;
+      setState(() {});
     }
   }
 
@@ -35,46 +39,76 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.white,
         child: Stack(
           children: [
-            (_itemcount != 0)
-                ? Container(
-                    margin: EdgeInsets.only(top: 80.0),
-                    child: ListView.builder(
-                      itemCount: _itemcount,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: 20.0,
-                            vertical: 10.0,
-                          ),
-                          padding: EdgeInsets.all(20.0),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                jsonResponse[index]["title"],
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                ),
-                              ),
-                              SizedBox(height: 10.0),
-                              Container(
-                                height: 40.0,
-                                width: 100.0,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+            (searchCode == 0)
+                ? Center(
+                    child: Text("Search for something"),
                   )
-                : Center(
-                    child: Text("Searching"),
-                  ),
+                : (_itemcount != 0)
+                    ? Container(
+                        margin: EdgeInsets.only(top: 80.0),
+                        child: ListView.builder(
+                          itemCount: _itemcount,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.symmetric(
+                                horizontal: 20.0,
+                                vertical: 13.0,
+                              ),
+                              padding: EdgeInsets.all(20.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey[350],
+                                    blurRadius: 5.0,
+                                    spreadRadius: 5.0,
+                                    offset: Offset(
+                                      3.0,
+                                      5.0,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    jsonResponse[index]["title"],
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20.0,
+                                    ),
+                                  ),
+                                  SizedBox(height: 15.0),
+                                  Container(
+                                    height: 40.0,
+                                    width: 100.0,
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Download",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 17.0,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : (searchCode == 1)
+                        ? Center(child: Text("Searching...."))
+                        : Center(
+                            child: Text("Something is wrong ..."),
+                          ),
             Container(
               alignment: Alignment.topCenter,
               child: Container(
@@ -107,16 +141,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        String query = querycontroller.text;
-                        querycontroller.text = "";
-                        setState(() {
-                          _itemcount = 0;
-                        });
-                        getJsondata(query).then(
-                          (value) => {
-                            print("Completed"),
-                          },
-                        );
+                        if (querycontroller.text.trim() != "") {
+                          String query = querycontroller.text;
+                          querycontroller.text = "";
+                          setState(() {
+                            _itemcount = 0;
+                            searchCode = 1;
+                          });
+                          getJsondata(query).then(
+                            (value) => {
+                              print("Completed"),
+                            },
+                          );
+                        }
                       },
                       child: Container(
                         padding: EdgeInsets.only(left: 8.0),
