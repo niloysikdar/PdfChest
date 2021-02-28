@@ -15,32 +15,89 @@ class _HomeScreenState extends State<HomeScreen> {
   int _itemcount = 0;
   int searchCode = 0;
   var jsonResponse;
+  String downpercen = "0";
+  bool isDownloading = false;
 
   Future<void> getJsondata(String query) async {
     String url = "https://bookapi.pythonanywhere.com/api/" + query.trim();
-    http.Response response = await http.get(url);
-    if (response.statusCode == 200) {
-      jsonResponse = json.decode(response.body);
-      _itemcount = jsonResponse.length;
-      searchCode = 2;
-      setState(() {});
-    } else {
-      print("error is happening");
+    try {
+      http.Response response = await http.get(url);
+      if (response.statusCode == 200) {
+        jsonResponse = json.decode(response.body);
+        _itemcount = jsonResponse.length;
+        searchCode = 2;
+        setState(() {});
+      } else {
+        searchCode = 3;
+        setState(() {});
+      }
+    } catch (e) {
       searchCode = 3;
       setState(() {});
     }
   }
 
-  downloadPdf(String url) async {
+  downloadPdf(String url, BuildContext context) async {
     await Permission.storage.request();
     String pdfname = url.split("/").last.toString();
     var downloadDir = await ExtStorage.getExternalStoragePublicDirectory(
         ExtStorage.DIRECTORY_DOWNLOADS);
     String savePath = downloadDir + "/" + pdfname;
     Dio dio = Dio();
-    dio.download(url, savePath, onReceiveProgress: (received, total) {
-      print(received.toString() + " of " + total.toString());
-    });
+    try {
+      setState(() {
+        isDownloading = true;
+      });
+      await dio.download(url, savePath, onReceiveProgress: (received, total) {
+        setState(() {
+          downpercen = ((received / total) * 100).toStringAsFixed(0);
+        });
+      });
+      setState(() {
+        downpercen = "0";
+        isDownloading = false;
+      });
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text("Download finished"),
+          content: Text("Check your Downloads folder"),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: Text(
+                "Okay",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15.0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      setState(() {
+        downpercen = "0";
+        isDownloading = false;
+      });
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text("Unable to download file !"),
+          actions: [
+            FlatButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: Text("Okay"),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -56,7 +113,26 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             (searchCode == 0)
                 ? Center(
-                    child: Text("Search for something"),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Search for something ...",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                        Text(
+                          "And get pdfs ...",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18.0,
+                          ),
+                        ),
+                      ],
+                    ),
                   )
                 : (_itemcount != 0)
                     ? Container(
@@ -98,7 +174,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(height: 15.0),
                                   GestureDetector(
                                     onTap: () {
-                                      downloadPdf(jsonResponse[index]["url"]);
+                                      downloadPdf(
+                                        jsonResponse[index]["url"],
+                                        context,
+                                      );
                                     },
                                     child: Container(
                                       height: 40.0,
@@ -126,9 +205,32 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       )
                     : (searchCode == 1)
-                        ? Center(child: Text("Searching...."))
+                        ? Center(
+                            child: Text(
+                              "Searching....",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                          )
                         : Center(
-                            child: Text("Something is wrong ..."),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(40.0),
+                                  child: Text(
+                                    "Something is wrong ...\nCheck your internet connection or try after sometime",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
             Container(
               alignment: Alignment.topCenter,
@@ -165,15 +267,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (querycontroller.text.trim() != "") {
                           String query = querycontroller.text;
                           querycontroller.text = "";
+                          querycontroller.clear();
                           setState(() {
                             _itemcount = 0;
                             searchCode = 1;
                           });
-                          getJsondata(query).then(
-                            (value) => {
-                              print("Completed"),
-                            },
-                          );
+                          getJsondata(query);
                         }
                       },
                       child: Container(
@@ -189,6 +288,49 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+            isDownloading
+                ? Center(
+                    child: Container(
+                      height: 180.0,
+                      width: MediaQuery.of(context).size.width / 1.5,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[350],
+                            blurRadius: 3.0,
+                            spreadRadius: 3.0,
+                            offset: Offset(
+                              2.0,
+                              3.0,
+                            ),
+                          )
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            height: 50.0,
+                            width: 50.0,
+                            child: CircularProgressIndicator(
+                              valueColor:
+                                  new AlwaysStoppedAnimation<Color>(Colors.red),
+                            ),
+                          ),
+                          Text(
+                            "Downloading.... " + downpercen.toString() + "%",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 17.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
