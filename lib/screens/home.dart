@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -26,6 +29,18 @@ class _HomeScreenState extends State<HomeScreen> {
       searchCode = 3;
       setState(() {});
     }
+  }
+
+  downloadPdf(String url) async {
+    await Permission.storage.request();
+    String pdfname = url.split("/").last.toString();
+    var downloadDir = await ExtStorage.getExternalStoragePublicDirectory(
+        ExtStorage.DIRECTORY_DOWNLOADS);
+    String savePath = downloadDir + "/" + pdfname;
+    Dio dio = Dio();
+    dio.download(url, savePath, onReceiveProgress: (received, total) {
+      print(received.toString() + " of " + total.toString());
+    });
   }
 
   @override
@@ -81,19 +96,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   SizedBox(height: 15.0),
-                                  Container(
-                                    height: 40.0,
-                                    width: 100.0,
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Download",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 17.0,
+                                  GestureDetector(
+                                    onTap: () {
+                                      downloadPdf(jsonResponse[index]["url"]);
+                                    },
+                                    child: Container(
+                                      height: 40.0,
+                                      width: 100.0,
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "Download",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 17.0,
+                                          ),
                                         ),
                                       ),
                                     ),
