@@ -17,6 +17,9 @@ dependencies:
   permission_handler: ^5.1.0+2
   share: ^0.6.5+4
   rate_my_app: ^0.7.2
+  url_launcher: ^5.7.10
+  flutter_launcher_icons: ^0.8.1
+  flutter_launcher_name: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -41,3 +44,11 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/icon.png"
+
+flutter_launcher_name:
+  name: "Pdf Chest"

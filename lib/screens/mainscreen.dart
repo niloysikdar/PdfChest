@@ -3,6 +3,7 @@ import 'package:PdfChest/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -47,6 +48,7 @@ class _MainPageState extends State<MainPage> {
                       .callEvent(RateMyAppEventType.rateButtonPressed);
                   Navigator.pop<RateMyAppDialogButton>(
                       context, RateMyAppDialogButton.rate);
+                  _launchPlayStore();
                 } else {
                   Navigator.pop(context);
                 }
@@ -64,6 +66,20 @@ class _MainPageState extends State<MainPage> {
       );
       //}
     });
+  }
+
+  _launchPlayStore() async {
+    String url = "https://play.google.com/store/apps/details?id=com.deepstash";
+    if (await canLaunch(url)) {
+      final bool launchSeccess = await launch(
+        url,
+        forceSafariVC: false,
+        universalLinksOnly: true,
+      );
+      if (!launchSeccess) {
+        await launch(url, forceSafariVC: true);
+      }
+    }
   }
 
   @override
@@ -182,6 +198,9 @@ class _MainPageState extends State<MainPage> {
                 ),
               ),
               ListTile(
+                onTap: () {
+                  _launchPlayStore();
+                },
                 leading: Icon(
                   Icons.star_rate,
                   size: 30.0,
