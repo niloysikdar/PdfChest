@@ -1,6 +1,7 @@
 import 'package:PdfChest/screens/about.dart';
 import 'package:PdfChest/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -19,8 +20,29 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         backgroundColor: Colors.red,
         toolbarHeight: 60.0,
-        title: Text("Pdf Chest"),
+        title: Text(
+          "Pdf Chest",
+          style: TextStyle(fontSize: 23.0),
+        ),
         centerTitle: true,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Share.share(
+                "Want to get pdfs for free ? I am enjoying the application Pdf Chest. You can also download and use it from here : https://pub.dev/packages/share",
+                subject: "Download the application here",
+              );
+            },
+            child: Container(
+              color: Colors.red,
+              padding: EdgeInsets.symmetric(horizontal: 15.0),
+              child: Icon(
+                Icons.share,
+                size: 30.0,
+              ),
+            ),
+          ),
+        ],
       ),
       body: list[index],
       drawer: SizedBox(
@@ -35,17 +57,35 @@ class _MainPageState extends State<MainPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      CircleAvatar(
-                        child: Text("Text"),
+                      ClipRRect(
+                        child: Image.asset(
+                          'images/icon.png',
+                          height: 80.0,
+                        ),
                       ),
-                      Text("Pdf Chest"),
+                      Text(
+                        "Pdf Chest",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 23.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
               ListTile(
-                leading: Icon(Icons.home),
-                title: Text("Home"),
+                leading: Icon(
+                  Icons.home,
+                  size: 30.0,
+                ),
+                title: Text(
+                  "Home",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
+                ),
                 onTap: () {
                   setState(() {
                     index = 0;
@@ -54,8 +94,16 @@ class _MainPageState extends State<MainPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.info),
-                title: Text("About"),
+                leading: Icon(
+                  Icons.info,
+                  size: 30.0,
+                ),
+                title: Text(
+                  "About",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
+                ),
                 onTap: () {
                   setState(() {
                     index = 1;
@@ -64,12 +112,34 @@ class _MainPageState extends State<MainPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.star_rate),
-                title: Text("rate Us"),
+                onTap: () {
+                  Share.share(
+                    "Want to get pdfs for free ? I am enjoying the application Pdf Chest. You can also download and use it from here : https://pub.dev/packages/share",
+                    subject: "Download the application here",
+                  );
+                },
+                leading: Icon(
+                  Icons.share,
+                  size: 30.0,
+                ),
+                title: Text(
+                  "Share",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
+                ),
               ),
               ListTile(
-                leading: Icon(Icons.share),
-                title: Text("Share"),
+                leading: Icon(
+                  Icons.star_rate,
+                  size: 30.0,
+                ),
+                title: Text(
+                  "Rate the app",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
+                ),
               ),
             ],
           ),
