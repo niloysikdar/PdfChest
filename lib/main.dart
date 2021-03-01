@@ -1,4 +1,4 @@
-import 'package:PdfChest/screens/home.dart';
+import 'package:PdfChest/screens/mainscreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: MainPage(),
     );
   }
 }
