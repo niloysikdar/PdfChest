@@ -1,6 +1,7 @@
 import 'package:PdfChest/screens/about.dart';
 import 'package:PdfChest/screens/home.dart';
 import 'package:flutter/material.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 import 'package:share/share.dart';
 
 class MainPage extends StatefulWidget {
@@ -14,6 +15,57 @@ class _MainPageState extends State<MainPage> {
     HomeScreen(),
     AboutPage(),
   ];
+
+  RateMyApp _rateMyApp = RateMyApp(
+    preferencesPrefix: 'rateMyApp_',
+    minDays: 0,
+    minLaunches: 1,
+    remindDays: 0,
+    remindLaunches: 2,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _rateMyApp.init().then((_) {
+      //if (_rateMyApp.shouldOpenDialog) {
+      _rateMyApp.showStarRateDialog(
+        context,
+        title: "Enjoying Pdf Chest !",
+        message: "Please leave a rating :)",
+        actionsBuilder: (context, stars) {
+          return [
+            FlatButton(
+              child: Text("Ok"),
+              onPressed: () async {
+                if (stars != null) {
+                  _rateMyApp.save();
+                  print('Thanks for the ' +
+                      (stars == null ? '0' : stars.round().toString()) +
+                      ' star(s) !');
+                  await _rateMyApp
+                      .callEvent(RateMyAppEventType.rateButtonPressed);
+                  Navigator.pop<RateMyAppDialogButton>(
+                      context, RateMyAppDialogButton.rate);
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+            )
+          ];
+        },
+        ignoreNativeDialog: true,
+        dialogStyle: DialogStyle(
+          titleAlign: TextAlign.center,
+          messageAlign: TextAlign.center,
+          messagePadding: EdgeInsets.only(bottom: 20.0),
+        ),
+        starRatingOptions: StarRatingOptions(),
+      );
+      //}
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +98,7 @@ class _MainPageState extends State<MainPage> {
       ),
       body: list[index],
       drawer: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.7,
+        width: MediaQuery.of(context).size.width * 0.75,
         child: Drawer(
           child: Column(
             children: [
