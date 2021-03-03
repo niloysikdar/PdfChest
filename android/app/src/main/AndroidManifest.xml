@@ -47,5 +47,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        tools:replace="android:allowBackup"
     </application>
 </manifest>

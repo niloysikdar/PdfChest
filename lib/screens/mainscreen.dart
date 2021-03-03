@@ -11,7 +11,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  String appurl = "https://play.google.com/store/apps/details?id=com.deepstash";
+  String appurl = "https://play.google.com/store/apps/details?id";
   int index = 0;
   List<Widget> list = [
     HomeScreen(),
@@ -94,8 +94,8 @@ class _MainPageState extends State<MainPage> {
           GestureDetector(
             onTap: () {
               Share.share(
-                "Want to get pdfs for free ? I am enjoying the application Pdf Chest. You can also download and use it from here : $appurl",
-                subject: "Download the application here",
+                "Want to get pdfs for free ? I am enjoying the ad-free application Pdf Chest. Enter a topic and get a variety of suggestions of pdfs which you can download. Install the app from here : $appurl",
+                subject: "Download the application ",
               );
             },
             child: Container(
@@ -179,8 +179,8 @@ class _MainPageState extends State<MainPage> {
               ListTile(
                 onTap: () {
                   Share.share(
-                    "Want to get pdfs for free ? I am enjoying the application Pdf Chest. You can also download and use it from here : $appurl",
-                    subject: "Download the application here",
+                    "Want to get pdfs for free ? I am enjoying the ad-free application Pdf Chest. Enter a topic and get a variety of suggestions of pdfs which you can download. Install and use the app from here : $appurl",
+                    subject: "Download the application ",
                   );
                 },
                 leading: Icon(
