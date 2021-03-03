@@ -11,7 +11,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  String appurl = "https://play.google.com/store/apps/details?id";
+  String appurl =
+      "https://play.google.com/store/apps/details?id=com.pdfchest.android";
   int index = 0;
   List<Widget> list = [
     HomeScreen(),

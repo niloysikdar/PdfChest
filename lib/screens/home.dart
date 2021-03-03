@@ -262,8 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         if (querycontroller.text.trim() != "") {
                           String query = querycontroller.text;
-                          querycontroller.text = "";
-                          querycontroller.clear();
                           setState(() {
                             _itemcount = 0;
                             searchCode = 1;
