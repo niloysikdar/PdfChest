@@ -1,4 +1,4 @@
-package com.example.PdfChest
+package com.pdfchest.android
 
 import io.flutter.embedding.android.FlutterActivity
 
