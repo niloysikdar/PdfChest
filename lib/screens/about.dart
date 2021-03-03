@@ -21,7 +21,7 @@ class AboutPage extends StatelessWidget {
             ),
             SizedBox(height: 20.0),
             Text(
-              "Developed by : Niloy Sikdar, currenty an undergrad student in CSE. Pdf Chest is an application where you can search for a topic and you will get the list of available pdfs related to that topic. You can download them as well for free. And the best thing is that the app is completely ad-free. Enjoy and don't forget to rate the app on Google Play Store :)",
+              "Developed by : Niloy Sikdar, currenty an undergrad student in CSE. Pdf Chest is an application where you can search for a topic and the application will provide you with a list of available pdfs related to that topic. You can download them as well, for free. And the best part is that the app is completely ad-free. Enjoy and don't forget to rate the app and drop a review on Google Play Store :)",
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16.0,
