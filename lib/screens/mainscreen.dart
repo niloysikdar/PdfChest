@@ -94,7 +94,7 @@ class _MainPageState extends State<MainPage> {
           GestureDetector(
             onTap: () {
               Share.share(
-                "Want to get pdfs for free ? I am enjoying the ad-free application Pdf Chest. Enter a topic and get a variety of suggestions of pdfs which you can download. Install the app from here : $appurl",
+                "Want to get pdfs for free ? I am enjoying the ad-free application Pdf Chest. You just have to enter a topic and the application will provide you with a list of suggestions of pdfs which can be downloaded as well. Install and use the app from here : $appurl",
                 subject: "Download the application ",
               );
             },
@@ -179,7 +179,7 @@ class _MainPageState extends State<MainPage> {
               ListTile(
                 onTap: () {
                   Share.share(
-                    "Want to get pdfs for free ? I am enjoying the ad-free application Pdf Chest. Enter a topic and get a variety of suggestions of pdfs which you can download. Install and use the app from here : $appurl",
+                    "Want to get pdfs for free ? I am enjoying the ad-free application Pdf Chest. You just have to enter a topic and the application will provide you with a list of suggestions of pdfs which can be downloaded as well. Install and use the app from here : $appurl",
                     subject: "Download the application ",
                   );
                 },
