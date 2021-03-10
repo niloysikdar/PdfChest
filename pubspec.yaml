@@ -14,10 +14,10 @@ dependencies:
   http: ^0.12.2
   dio: ^3.0.10
   ext_storage: ^1.0.3
-  permission_handler: ^5.1.0+2
+  permission_handler: ^6.0.1+1
   share: ^0.6.5+4
   rate_my_app: ^0.7.2
-  url_launcher: ^5.7.10
+  url_launcher: ^6.0.2
   flutter_launcher_icons: ^0.8.1
   flutter_launcher_name: ^0.0.1
 
