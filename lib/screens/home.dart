@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text("Download finished"),
           content: Text("Check your Downloads folder"),
           actions: [
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (ctx) => AlertDialog(
           title: Text("Unable to download file !"),
           actions: [
-            FlatButton(
+            TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
@@ -244,6 +244,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: TextField(
                           controller: querycontroller,
+                          onSubmitted: (value) {
+                            if (querycontroller.text.trim() != "") {
+                              String query = querycontroller.text;
+                              setState(() {
+                                _itemcount = 0;
+                                searchCode = 1;
+                              });
+                              getJsondata(query);
+                            }
+                          },
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,

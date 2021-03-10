@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> {
           message: "Please leave a rating :)",
           actionsBuilder: (context, stars) {
             return [
-              FlatButton(
+              TextButton(
                 child: Text("Ok"),
                 onPressed: () async {
                   if (stars >= 3.0) {
