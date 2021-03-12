@@ -79,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     } catch (e) {
+      print(e.toString());
       setState(() {
         downpercen = "0";
         isDownloading = false;
