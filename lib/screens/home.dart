@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isDownloading = false;
 
   Future<void> getJsondata(String query) async {
-    String url = "https://bookapi.pythonanywhere.com/api/" + query.trim();
+    String url = "https://book-api-v01.herokuapp.com/api/" + query.trim();
     try {
       http.Response response = await http.get(url);
       if (response.statusCode == 200) {
